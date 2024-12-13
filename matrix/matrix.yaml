@@ -1,0 +1,28 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matrix-deployment
+spec:
+  selector:
+    matchLabels:
+      app: matrix-label
+  template:
+    metadata:
+      labels:
+        app: matrix-label
+    spec:
+      containers:
+      - name: matrix
+        image: fredericeducentre/matrix
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: matrix-service
+spec:
+  selector:
+    app: matrix-label
+  type: NodePort
+  ports:
+    - port: 80

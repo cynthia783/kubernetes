@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+spec:
+  selector:
+    matchLabels:
+      app: api-label
+  template:
+    metadata:
+      labels:
+        app: api-label
+    spec:
+      containers:
+      - name: api
+        image: fredericeducentre/facture-api
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: api-service
+spec:
+  selector:
+    app: api-label
+  type: NodePort
+  ports:
+    - port: 3000

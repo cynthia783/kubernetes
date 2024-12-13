@@ -1,0 +1,43 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: odoo
+  labels:
+    app: odoo
+spec:
+  ports:
+    - port: 8069
+  selector:
+    app: odoo
+    tier: frontend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odoo
+  labels:
+    app: odoo
+spec:
+  selector:
+    matchLabels:
+      app: odoo
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: odoo
+        tier: frontend
+    spec:
+      containers:
+      - image: odoo:15
+        name: odoo
+        env:
+        - name: HOST
+          value: odoo-postgres
+        - name: USER
+          value: odoo
+        - name: PASSWORD
+          value: myodoo

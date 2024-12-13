@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: metabase
+  labels:
+    app: metabase
+spec:
+  type: NodePort
+  ports:
+    - port: 3000
+  selector:
+    app: metabase
+    tier: frontend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metabase
+  labels:
+    app: metabse
+spec:
+  selector:
+    matchLabels:
+      app: metabase
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: metabase
+        tier: frontend
+    spec:
+      containers:
+      - image: metabase/metabase
+        name: metabase
+        env:
+        - name: MB_DB_TYPEE
+          value: "postgres"
+        - name: MB_DB_DBNAME
+          value: "postgres"
+        - name: MB_DB_PORT
+          value: "5432"
+        - name: MB_DB_USER
+          value: "root"
+        - name: MB_DB_PASS
+          value: "root"
+        ports:
+        - containerPort: 3000
+          name: metabase
